@@ -21,8 +21,8 @@ Figure 1. Latent behaviors for VAE, WAE, and GoFAE inspired from Figure 1 of of 
 All python dependencies for the GoFAE are in [`gofae_env.yml`](gofae_env.yml). Install with:
 
 ```
-$ git clone https://github.com/aripalmer/draft_repo.git
-$ cd draft_repo
+$ git clone https://github.com/aripalmer/gofae.git
+$ cd gofae
 $ conda env create -f gofae_env.yml
 $ conda activate gofae_env
 ```
@@ -33,15 +33,6 @@ loaded from torchvision and stored in `../data`. The CelebA dataset can be retri
 Place the extracted images into the folder `../data/celeba/img_align_celeba` and `list_eval_partition.csv` into `../data/celeba`.
 
 ### Usage
-<!--A correctly trained GoFAE model should have small reconstruction loss while becoming sufficiently close to the specified 
-prior class $\mathcal{G}$. Steps for training and evaluating GoFAE:
-1. Train the encoder and decoder with a GoF test for distribution class $\mathcal{G}$ as a regularizer with coefficient $\lambda$ 
-2. (Local normality) Encode multiple minibatches from either the training or validation set, collecting p-values
-produced from the GoF test for distribution class $\mathcal{G}$.
-3. (Global normality) Evaluate this collection of p-values for uniformity, returning a p-value associated with the uniformity test statistic.
-4. Repeat steps (2) and (3) multiple times.
-
-The following command will run steps 1-4 using an example configuration.-->
 The following will train the GoFAE based on the example [configuration](#yaml-configuration-template) and use the higher-criticism
 procedure to evaluate uniformity of p-values for model selection.
 ```
@@ -98,32 +89,13 @@ to `False` and then re-run:
 ```
 $ python Main.py -c configs/example.yaml
 ```
-<!--Under `eval_tests` in the yaml configuration are tests used to evaluate the trained model. For example, this model was trained
-with the Shapiro-Wilk GoF test for normality, but is also assessed under the Shapiro-Francia test.-->
 Inside `./output/experiment_<experiment>/img_output` there will be 3 images each containing a collection of the ground truth,
 reconstructed and generated images.
-
-<!--If uniformity results are poor, $\lambda$ should be changed.-->
-
-<!--
-| Data                                                 | Reconstruction |    Samples    |
-|------------------------------------------------------|----------------|---------------|
-| MNIST ([Config](link to mnist config))               |<img src="img/mnist-recon-sw.png" width="300" height="300"> |<img src="img/mnist-gen-sw.png" width="280" height="300">|
-| CIFAR10 ([Config](link to cifar config))             |<img src="img/cifar-recon-sw.png" width="300" height="300"> |<img src="img/cifar-gen-sw.png" width="280" height="300">|
-| CelebA ([Config](link to celeba config))             |<img src="img/celeba-recon-sw.png" width="300" height="300"> |<img src="img/celeba-gen-sw.png" width="280" height="300">|
-
-| Reconstruction                                       | Samples                                                    |
-|------------------------------------------------------|------------------------------------------------------------|
-|<img src="img/mnist-recon-sw.png" width="300" height="300"> | <img src="img/mnist-gen-sw.png" width="300" height="300">  |
-|<img src="img/cifar-recon-sw.png" width="300" height="300"> | <img src="img/cifar-gen-sw.png" width="300" height="300">  |
-|<img src="img/celeba-recon-sw.png" width="300" height="300"> | <img src="img/celeba-gen-sw.png" width="300" height="300"> |
--->
 
 ### Advanced configurations
 If a particular test configuration is unavailable it is possible to create one assuming the test statistic has been defined.
 A basic configuration template is in `./configs/example_null.yaml` and can be run:
 ```
-$ cd gofae
 $ python CreateEmpiricalNull.py -c configs/example_null.yaml
 ```
 #### YAML null creation configuration template
@@ -142,17 +114,6 @@ hc_test:
   test_set_samp_size: 100
   num_sims: 100
 ```
-
-<!--
-- n_z: the dimension of the bottleneck of the autoencoder.
-- batch_size: the number of observations in a minibatch.
-- num_projections: the number of times the (batch_size $\times$ n_z)-sized minibatch is projected down
-to one dimension. Orthonormal directions are used for projection.
-- num_sims: the number of simulated test statistics used to create the empirical null distribution. (set to 100,000
-in paper, for demonstration here just 100.)
-- optdir: 1 if a larger test statistic leads to closer matching, -1 if a smaller test statistic leads
-to closer matching.-->
-
 #### Creating new GoF distribution
 * Since the dimension of the code layer is multivariate (n_z), univariate GoF tests require projection. 
 * This can be done by projecting the (batch_size $\times$ n_z)-sized minibatch onto vectors sampled
@@ -174,7 +135,6 @@ distribution, projecting onto a random orthonormal basis, computing the new stat
 * Ensure that make_test in the `example_null.yaml` is set to `hc`.
 
 Several null distributions for different configurations can be found in the ```empirical_dist``` folder.
-
 
 ### Citation
 ```
