@@ -1,0 +1,13 @@
+diststat_path: './empirical_dist'
+make_test: 'gof'
+
+gof_test:
+  n_z: 30
+  batch_size: 256
+  num_projections: 30
+  num_sims: 100
+  optdir: 1
+
+hc_test:
+  test_set_samp_size: 100
+  num_sims: 100_000

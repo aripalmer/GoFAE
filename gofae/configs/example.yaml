@@ -1,0 +1,53 @@
+data_params:
+  dataset: 'mnist'
+  data_path: '../data'
+  gen_samples: False
+
+gof_test_params:
+  test: 'sw'
+  new_stat: 'min'
+  use_proj: True
+  n_z: 10
+  latent_dim_proj: 1
+  num_projections: 10
+  batch_size: 128
+  alpha: 0.3
+  momentum: 0.01
+  lambda_alpha: 25.
+  use_HT_in_loss: False
+  diststat_path: './empirical_dist'
+
+eval_tests:
+  - !!python/tuple ['sw', True, 'min']
+  - !!python/tuple ['sf', True, 'min']
+  - !!python/tuple ['cvm', True, 'max']
+  - !!python/tuple ['ks', True, 'max']
+  - !!python/tuple ['ep1', True, 'min']
+
+hc_test_params:
+  test_set_samp_size: 100
+  num_repeats: 5
+
+trainer_params:
+  epochs: 50
+  num_workers: 0
+  fQuiet: False
+  train: False
+
+optim_params:
+  lr_adam_enc_p1: 3.0e-3
+  beta1_enc_p1: 0.5
+  beta2_enc_p1: 0.999
+  lr_cycle: 1.0e-3
+  lr_sgd: 5.0e-3
+  lr_adam_dec: 3.0e-3
+  beta1_dec: 0.5
+  beta2_dec: 0.999
+
+logging_params:
+  seed: 42
+  experiment: 1
+  output_path: './output'
+  ncv: 1
+  normalize_img: True
+  reprod: True
